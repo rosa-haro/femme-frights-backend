@@ -42,6 +42,16 @@ const userSchema = new Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  profilePicture: {
+    type: String,
+    default: "", // ✅ Default value set to an empty string
+    validate: {
+      validator: function (v) {
+        return v === "" || /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v);
+      },
+      message: "The profile picture must be a valid image URL",
+    },
+  },
   watchlist: [
     {
       type: Schema.Types.ObjectId,
@@ -57,3 +67,4 @@ const userSchema = new Schema({
 });
 
 module.exports = mongoose.model("User", userSchema, "users");
+

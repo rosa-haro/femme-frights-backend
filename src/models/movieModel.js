@@ -36,6 +36,7 @@ const movieSchema = new Schema({
         },
         message: "The poster must be a valid image URL",
       },
+      default: "",
     },
     overview: {
       type: String,
