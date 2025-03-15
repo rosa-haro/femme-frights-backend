@@ -12,6 +12,7 @@ const {
     sortMoviesByYearDesc,
     searchMovieByTitle,
   } = require("../controllers/moviesController");
+const { verifyToken, verifyAdmin } = require("../middlewares/auth");
 
 router.get("/", getAllMovies)
 router.get("/:idMovie", getMovieById)
@@ -22,10 +23,10 @@ router.get("/sort/year-desc", sortMoviesByYearDesc)
 
 router.get("/search/title", searchMovieByTitle)
 
-router.delete("/:idMovie", deleteMovie)
+router.delete("/:idMovie", verifyToken, verifyAdmin, deleteMovie)
 
-router.post("/", addMovie)
+router.post("/", verifyToken, verifyAdmin, addMovie)
 
-router.patch("/:idMovie", updateMovie)
+router.patch("/:idMovie", verifyToken, verifyAdmin, updateMovie)
 
 module.exports = router
