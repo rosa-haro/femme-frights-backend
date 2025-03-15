@@ -26,7 +26,7 @@ const getAllUsers = async (req, res) => {
   };
 
   // Update user's own profile
-  const updateUserInfo = async (req, res) => {
+  const updateLoggedUser = async (req, res) => {
     try {
         const idUser = req.payload._id; 
 
@@ -62,8 +62,20 @@ const getAllUsers = async (req, res) => {
         res.status(500).json({ status: "Failed", error: error.message });
     }
 };
-  
+
+ const deleteLoggedUser = async (req, res) => {
+    try {
+        const idUser = req.payload._id;
+        const user = await UserModel.findByIdAndDelete(idUser);
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
+        res.status(200).send("Used deleted successfully");
+      } catch (error) {
+        res.status(500).send({ status: "Failed", error: error.message });
+      }
+    };
 
   module.exports = {
-    getAllUsers, getUserById, updateUserInfo
+    getAllUsers, getUserById, updateLoggedUser, deleteLoggedUser
   }
