@@ -15,7 +15,10 @@ const getAllUsers = async (req, res) => {
   const getUserById = async (req, res) => {
     try {
       const idUser = req.payload._id;
-      const user = await UserModel.findById(idUser).populate("favorites", "watchlist"); 
+      const user = await UserModel.findById(idUser)
+      .populate("favorites")
+      .populate("watchlist"); 
+
       if (!user) {
         return res.status(404).send("User not found");
       }
@@ -76,6 +79,64 @@ const getAllUsers = async (req, res) => {
       }
     };
 
+    const toggleFavorite = async (req, res) => {
+        try {
+            const idUser = req.payload._id;
+            const { idMovie } = req.params;
+    
+            if (!idMovie) {
+                return res.status(400).json({ status: "Failed", message: "Movie ID is required" });
+            }
+    
+            const user = await UserModel.findById(idUser);
+            if (!user) {
+                return res.status(404).json({ status: "Failed", message: "User not found" });
+            }
+    
+            const movieIndex = user.favorites.indexOf(idMovie);
+    
+            if (movieIndex === -1) {
+                user.favorites.push(idMovie);
+            } else {
+                user.favorites.splice(movieIndex, 1);
+            }
+    
+            await user.save();
+            res.status(200).json({ status: "Success", favorites: user.favorites });
+        } catch (error) {
+            res.status(500).json({ status: "Failed", error: error.message });
+        }
+    };
+
+    const toggleWatchlist = async (req, res) => {
+        try {
+            const idUser = req.payload._id;
+            const { idMovie } = req.params;
+    
+            if (!idMovie) {
+                return res.status(400).json({ status: "Failed", message: "Movie ID is required" });
+            }
+    
+            const user = await UserModel.findById(idUser);
+            if (!user) {
+                return res.status(404).json({ status: "Failed", message: "User not found" });
+            }
+    
+            const movieIndex = user.watchlist.indexOf(idMovie);
+    
+            if (movieIndex === -1) {
+                user.watchlist.push(idMovie);
+            } else {
+                user.watchlist.splice(movieIndex, 1);
+            }
+    
+            await user.save();
+            res.status(200).json({ status: "Success", watchlist: user.watchlist });
+        } catch (error) {
+            res.status(500).json({ status: "Failed", error: error.message });
+        }
+    };
+
   module.exports = {
-    getAllUsers, getUserById, updateLoggedUser, deleteLoggedUser
+    getAllUsers, getUserById, updateLoggedUser, deleteLoggedUser, toggleFavorite, toggleWatchlist
   }
