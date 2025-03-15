@@ -1,5 +1,6 @@
 const express = require("express")
 const moviesRouter = require("./src/routes/moviesRouter")
+const loginRouter = require("./src/routes/loginRouter")
 const cors = require("cors")
 
 require("dotenv").config();
@@ -12,6 +13,7 @@ app.use(cors())
 connectToDatabase()
 
 app.use("/movies", moviesRouter)
+app.use("/", loginRouter)
 
 const PORT = process.env.PORT
 
