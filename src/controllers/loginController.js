@@ -4,7 +4,10 @@ const { generateToken } = require("../utils/utils");
 
 const signup = async (req, res) => {
     try {
-        const { name, lastName, username, email, password, role } = req.body;
+        const { name, lastName, username, email, password, role, profilePicture } = req.body;
+        
+        const userProfilePicture = profilePicture
+        
         const newUser = {
           name,
           lastName,
@@ -12,6 +15,7 @@ const signup = async (req, res) => {
           email,
           password: await bcrypt.hash(password, 10),
           role,
+          userProfilePicture,
         };
         await UserModel.create(newUser);
 
