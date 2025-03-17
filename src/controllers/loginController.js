@@ -1,6 +1,7 @@
 const UserModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/utils");
+const sendEmail = require("../services/emailServices")
 
 const signup = async (req, res) => {
     try {
@@ -18,6 +19,7 @@ const signup = async (req, res) => {
           userProfilePicture,
         };
         await UserModel.create(newUser);
+        await sendEmail(email)
 
         res.status(201).json({ status: "Success", message: "The user was successfully created" });
     } catch (error) {
