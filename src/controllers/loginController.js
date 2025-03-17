@@ -30,14 +30,19 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await UserModel.findOne({ username: username });
+
+        if (!username || !password) {
+            return res.status(400).json({ status: "Failed", message: "Username and password are required." });
+        }
+
+        const user = await UserModel.findOne({ username });
         if (!user) {
-            return res.status(404).send("Invalid username or password");
+            return res.status(401).json({ status: "Failed", message: "Invalid username or password." });
         }
 
         const validatePassword = await bcrypt.compare(password, user.password);
         if (!validatePassword) {
-            return res.status(404).send("Invalid username or password");
+            return res.status(401).json({ status: "Failed", message: "Invalid username or password." });
         }
     
         const payload = {
@@ -49,9 +54,9 @@ const login = async (req, res) => {
         const token = generateToken(payload, false);
         const refresh_token = generateToken(payload, true);
 
-        res.status(200).send({ user, token, refresh_token });
+        res.status(200).json({ user, token, refresh_token });
     } catch (error) {
-        res.status(500).send({ status: "Failed", error: error.message });
+        res.status(500).json({ status: "Failed", message: error.message });
     }
 };
 
