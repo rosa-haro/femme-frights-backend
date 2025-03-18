@@ -44,12 +44,12 @@ const userSchema = new Schema({
   },
   profilePicture: {
     type: String,
-    default: "", // ✅ Default value set to an empty string
+    default: "/uploads/default-profile.jpg",
     validate: {
       validator: function (v) {
-        return v === "" || /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v);
+        return v === "" || v.startsWith("/uploads/") || /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v);
       },
-      message: "The profile picture must be a valid image URL",
+      message: "The profile picture must be a valid image URL or local path",
     },
   },
   watchlist: [

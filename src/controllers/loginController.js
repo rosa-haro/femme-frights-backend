@@ -2,29 +2,41 @@ const UserModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/utils");
 const sendEmail = require("../services/emailServices")
+const upload = require("../middlewares/multerConfig");
 
 const signup = async (req, res) => {
-    try {
-        const { name, lastName, username, email, password, role, profilePicture } = req.body;
-        
-        const userProfilePicture = profilePicture
-        
-        const newUser = {
-          name,
-          lastName,
-          username,
-          email,
-          password: await bcrypt.hash(password, 10),
-          role,
-          userProfilePicture,
-        };
-        await UserModel.create(newUser);
-        await sendEmail(email)
+    upload.single("profilePicture")(req, res, async function (error) {
+        if (error) {
+            return res.status(400).json({ status: "Failed", message: error.message });
+        }
 
-        res.status(201).json({ status: "Success", message: "The user was successfully created" });
-    } catch (error) {
-        res.status(500).json({ status: "Failed", error: error.message });
-    }
+        try {
+            const { name, lastName, username, email, password, role } = req.body;
+            const serverUrl = "http://localhost:3500"; 
+            const profilePicture = req.file ? `${serverUrl}/uploads/${req.file.filename}` : `${serverUrl}/uploads/default-profile.jpg`;
+            if (!name || !lastName || !username || !email || !password) {
+                return res.status(400).json({ status: "Failed", message: "Name, last name, username, email and password are required" });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const newUser = await UserModel.create({
+                name,
+                lastName,
+                username,
+                email,
+                password: hashedPassword,
+                role,
+                profilePicture,
+            });
+
+            await sendEmail(email);
+
+            res.status(201).json({ status: "Success", message: "User successfully created", user: newUser });
+        } catch (error) {
+            res.status(500).json({ status: "Failed", message: error.message });
+        }
+    });
 };
 
 const login = async (req, res) => {
