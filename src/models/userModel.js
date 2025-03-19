@@ -44,7 +44,7 @@ const userSchema = new Schema({
   },
   profilePicture: {
     type: String,
-    default: "/uploads/default-profile.jpg",
+    default: "/uploads/default-profile-picture.jpg",
     validate: {
       validator: function (v) {
         return v === "" || v.startsWith("/uploads/") || /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v);
