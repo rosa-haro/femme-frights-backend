@@ -13,7 +13,7 @@ const signup = async (req, res) => {
         try {
             const { name, lastName, username, email, password, role } = req.body;
             const serverUrl = "http://localhost:3500"; 
-            const profilePicture = req.file ? `${serverUrl}/uploads/${req.file.filename}` : `${serverUrl}/uploads/default-profile.jpg`;
+            const profilePicture = req.file ? `${serverUrl}/uploads/${req.file.filename}` : `${serverUrl}/uploads/default-profile-picture.png`;
             if (!name || !lastName || !username || !email || !password) {
                 return res.status(400).json({ status: "Failed", message: "Name, last name, username, email and password are required" });
             }
