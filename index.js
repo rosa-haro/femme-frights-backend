@@ -13,6 +13,7 @@ app.use(express.json())
 app.use(cors())
 connectToDatabase()
 
+app.use('/uploads', express.static('uploads'));
 app.use("/movies", moviesRouter)
 app.use("/", loginRouter)
 app.use("/users", usersRouter)
