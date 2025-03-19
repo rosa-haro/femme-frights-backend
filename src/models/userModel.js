@@ -32,6 +32,7 @@ const userSchema = new Schema({
     lowercase: true,
     match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
   },
+  
   password: {
     type: String,
     required: [true, "Password is required"],
