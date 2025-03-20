@@ -31,29 +31,32 @@ const getAllUsers = async (req, res) => {
   // Update user's own profile
   const updateLoggedUser = async (req, res) => {
     try {
-        const idUser = req.payload._id; 
-
+        const idUser = req.payload._id;
         if (!idUser) {
             return res.status(400).json({ status: "Failed", message: "Invalid user ID" });
         }
 
         let newUserData = { ...req.body };
 
-        // ID and role cannot be changed
-        delete newUserData.role;
-        delete newUserData._id;
-
-        // Check if password is being updated
-        if (newUserData.password) {
-            if (newUserData.password.length < 8) {
-                return res.status(400).json({ status: "Failed", message: "Password must be at least 8 characters long" });
-            }
+        // Hash password
+        if (newUserData.password?.length < 8) {
+            return res.status(400).json({ status: "Failed", message: "Password must be at least 8 characters long" });
+        } else if (newUserData.password) {
             newUserData.password = await bcrypt.hash(newUserData.password, 10);
         }
 
+        // Handle profile picture update
+        if (req.file) {
+            console.log("Image received:", req.file);
+            newUserData.profilePicture = `http://localhost:3500/uploads/${req.file.filename}`;
+        } else {
+            console.log("No image received.");
+        }
+
+        // Update user in database
         const updatedUser = await UserModel.findByIdAndUpdate(idUser, newUserData, {
             new: true,
-            runValidators: true, // Applies mongoose validators
+            runValidators: true,
         });
 
         if (!updatedUser) {
@@ -62,9 +65,11 @@ const getAllUsers = async (req, res) => {
 
         res.status(200).json(updatedUser);
     } catch (error) {
+        console.error("Error in updateLoggedUser:", error);
         res.status(500).json({ status: "Failed", error: error.message });
     }
 };
+
 
  const deleteLoggedUser = async (req, res) => {
     try {
