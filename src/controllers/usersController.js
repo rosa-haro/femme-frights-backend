@@ -31,7 +31,7 @@ const getAllUsers = async (req, res) => {
   // Update user's own profile
   const updateLoggedUser = async (req, res) => {
     try {
-        const idUser = req.payload._id; 
+        const idUser = req.payload._id;
 
         if (!idUser) {
             return res.status(400).json({ status: "Failed", message: "Invalid user ID" });
@@ -51,9 +51,22 @@ const getAllUsers = async (req, res) => {
             newUserData.password = await bcrypt.hash(newUserData.password, 10);
         }
 
+        // Si se subió una nueva imagen, actualizar el campo profilePicture
+        if (req.file) {
+            const serverUrl = "http://localhost:3500"
+            newUserData.profilePicture = `${serverUrl}/uploads/${req.file.filename}`;
+        }
+
+      //   if (newUserData.watchlist && Array.isArray(newUserData.watchlist)) {
+      //     newUserData.watchlist = newUserData.watchlist.filter(item => item && item.trim() !== "");
+      // }
+
+      // if (newUserData.favorites && Array.isArray(newUserData.favorites)) {
+      //     newUserData.favorites = newUserData.favorites.filter(item => item && item.trim() !== "");
+      // }
         const updatedUser = await UserModel.findByIdAndUpdate(idUser, newUserData, {
             new: true,
-            runValidators: true, // Applies mongoose validators
+            runValidators: true,
         });
 
         if (!updatedUser) {

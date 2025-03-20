@@ -2,7 +2,7 @@ const UserModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/utils");
 const sendEmail = require("../services/emailServices")
-const upload = require("../middlewares/multerConfig");
+const upload = require("../middlewares/multer");
 
 const signup = async (req, res) => {
     upload.single("profilePicture")(req, res, async function (error) {

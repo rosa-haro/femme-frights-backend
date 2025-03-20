@@ -9,11 +9,13 @@ const connectToDatabase = require("./src/config/db")
 
 const app = express();
 
-app.use(express.json())
 app.use(cors())
 connectToDatabase()
 
+app.use(express.json())
+
 app.use('/uploads', express.static('uploads'));
+
 app.use("/movies", moviesRouter)
 app.use("/", loginRouter)
 app.use("/users", usersRouter)
