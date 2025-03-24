@@ -26,7 +26,7 @@ const movieSchema = new Schema({
       type: Number,
       required: [true, "The release year is required"],
       min: [1895, "The year must be later than 1895"], // 1895 was the year of the first recorded film
-      max: [new Date().getFullYear(), "The year cannot be in the future"], // Dynamically sets the current year
+      max: [new Date().getFullYear(), "The year cannot be in the future"], // To dynamically set the current year
     },
     poster: {
       type: String,
