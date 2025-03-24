@@ -106,8 +106,8 @@ Create a `.env` file:
 ```
 PORT=3500
 MONGO_URL=mongodb+srv://rosaharodev:w8SvTuiehTF1V2eM@final-project-codespace.j8hq3.mongodb.net/femme_frights
-SECRET_TOKEN=your_access_token_secret
-SECRET_REFRESH_TOKEN=your_refresh_token_secret
+SECRET_TOKEN=2b6b658c8bf7efc22cc161f5c9c84e23165d476f22cac9270d1763977773bd55
+SECRET_REFRESH_TOKEN=72f315673ac5a68acfcbac395eed680e6e104e69f41ba53157d610e86095e935
 ```
 
 ### 4. Run the server
