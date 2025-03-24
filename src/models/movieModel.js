@@ -30,13 +30,8 @@ const movieSchema = new Schema({
     },
     poster: {
       type: String,
-      validate: {
-        validator: function (v) {
-          return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v);
-        },
-        message: "The poster must be a valid image URL",
-      },
-      default: "",
+      required: [true, "TMDB movie ID is required"],
+      trim: true,
     },
     overview: {
       type: String,
