@@ -8,6 +8,7 @@ const emailConfig = nodemailer.createTransport({
     }
 })
 
+// Send welcome email
 const sendEmail = async (to) => {
     try {
         const mailOptions = {
