@@ -32,7 +32,7 @@ const userSchema = new Schema({
     lowercase: true,
     match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
   },
-  
+
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -48,7 +48,11 @@ const userSchema = new Schema({
     default: "/uploads/default-profile-picture.png",
     validate: {
       validator: function (v) {
-        return v === "" || v.startsWith("/uploads/") || /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v);
+        return (
+          v === "" ||
+          v.startsWith("/uploads/") ||
+          /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(v)
+        );
       },
       message: "The profile picture must be a valid image URL or local path",
     },
@@ -67,5 +71,7 @@ const userSchema = new Schema({
   ],
 });
 
-module.exports = mongoose.model("User", userSchema, "users");
+// PROFILE PICTURE AS A URL HAS NOT BEEN IMPLEMENTED IN THE FRONTEND YET, 
+// BUT WILL BE LEFT HERE FOR FUTURE IMPLEMENTATION 
 
+module.exports = mongoose.model("User", userSchema, "users");

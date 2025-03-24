@@ -23,6 +23,10 @@ router.get("/sort/year-desc", sortMoviesByYearDesc)
 
 router.get("/search/title", searchMovieByTitle)
 
+// THE FOLLOWING ENDPOINTS HAVE NOT BEEN IMPLEMENTED IN THE FRONTEND,
+// BUT ARE FUNCTIONAL AND HAVE THEREFORE BEEN LEFT HERE FOR FUTURE 
+// IMPLEMENTATION
+
 router.delete("/:idMovie", verifyToken, verifyAdmin, deleteMovie)
 
 router.post("/", verifyToken, verifyAdmin, addMovie)
