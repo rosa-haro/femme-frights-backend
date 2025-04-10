@@ -115,7 +115,7 @@ SECRET_REFRESH_TOKEN=demorefreshtoken0987654321
 
 ### 4. Run the server
 ```bash
-npm start
+npm run dev
 ```
 > Server will run at: `http://localhost:3500`
 
