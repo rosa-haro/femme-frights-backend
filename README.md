@@ -47,7 +47,7 @@ index.js                # Entry point
 
 ## 🌐 API Endpoints
 
-> ⚠️ **Note**: The refresh-token edpoint is currently available in the API but not yet implemented in the frontend.
+> ⚠️ **Note**: The refresh-token endpoint is currently available in the API but not yet implemented in the frontend.
 
 ### 🔐 Auth (Login / Signup)
 | Method | Endpoint         | Description                   |
@@ -106,6 +106,7 @@ Create a `.env` file based on the provided `.env.example`:
 
 ```bash
 PORT=3500
+NODE_ENV=development
 MONGO_URL=mongodb+srv://demo_user:demo_password@femme-frights-cluster.gjljzhu.mongodb.net/femme_frights_demo
 SECRET_TOKEN=demotoken1234567890
 SECRET_REFRESH_TOKEN=demorefreshtoken0987654321
