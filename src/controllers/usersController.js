@@ -43,7 +43,11 @@ const updateLoggedUser = async (req, res) => {
     // Handle profile picture update
     if (req.file) {
       console.log("Image received:", req.file);
-      newUserData.profilePicture = `http://localhost:3500/uploads/${req.file.filename}`;
+      const serverUrl = process.env.NODE_ENV === 'production' 
+        ? "https://femme-frights-demo-production.up.railway.app/"  
+        : "http://localhost:3500"; 
+
+        newUserData.profilePicture = `${serverUrl}/uploads/${req.file.filename}`;
     } else {
       console.log("No image received.");
     }
