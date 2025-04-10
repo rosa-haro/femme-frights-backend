@@ -1,3 +1,4 @@
+
 # 🎬 FemmeFrights API - Backend
 
 A RESTful API for **FemmeFrights**, a platform focused on horror films directed by women. Build with Node.js and Express, the API hadles user management, movie data, authentication, and  user-specific features such as favorites and watchlists.
@@ -101,14 +102,16 @@ npm install
 
 ### 3. Configure environment variables
 
-Create a `.env` file:
+Create a `.env` file based on the provided `.env.example`:
 
-```
+```bash
 PORT=3500
-MONGO_URL=mongodb+srv://rosaharodev:w8SvTuiehTF1V2eM@final-project-codespace.j8hq3.mongodb.net/femme_frights
-SECRET_TOKEN=2b6b658c8bf7efc22cc161f5c9c84e23165d476f22cac9270d1763977773bd55
-SECRET_REFRESH_TOKEN=72f315673ac5a68acfcbac395eed680e6e104e69f41ba53157d610e86095e935
+MONGO_URL=mongodb+srv://demo_user:demo_password@femme-frights-cluster.gjljzhu.mongodb.net/femme_frights_demo
+SECRET_TOKEN=demotoken1234567890
+SECRET_REFRESH_TOKEN=demorefreshtoken0987654321
 ```
+
+✅ This configuration uses a public demo database prepared for testing.
 
 ### 4. Run the server
 ```bash
@@ -118,11 +121,11 @@ npm start
 
 ---
 
-## 🧪 Test Accounts
+## 🧪 Demo Accounts
 
-You can use these demo credentials to test the API:
+You can use these demo accounts to explore the API:
 
-**User Account**
+**Regular User**
 ```
 username: exampleuser
 password: 123456789
@@ -133,6 +136,8 @@ password: 123456789
 username: exampleadmin
 password: 123456789
 ```
+
+> ⚠️ Admin-exclusive endpoints are not yet implemented in the frontend.
 
 ---
 
