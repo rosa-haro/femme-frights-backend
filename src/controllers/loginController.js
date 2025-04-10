@@ -17,7 +17,9 @@ const signup = async (req, res) => {
         // Get user fields from body
       const { name, lastName, username, email, password, role } = req.body;
 
-      const serverUrl = "http://localhost:3500";
+      const serverUrl = process.env.NODE_ENV === 'production' 
+        ? "https://femme-frights-demo-production.up.railway.app"
+        : "http://localhost:3500";  
 
       // If a profile picture is not uploaded: default
       const profilePicture = req.file
