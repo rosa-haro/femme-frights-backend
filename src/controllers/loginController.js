@@ -4,63 +4,67 @@ const { generateToken } = require("../utils/utils");
 const sendEmail = require("../services/emailServices");
 const upload = require("../middlewares/multer");
 
-// Signup controller
-const signup = async (req, res) => {
-
+  // Signup controller
+  const signup = async (req, res) => {
     // Handle file upload for profile picture (multer)
-  upload.single("profilePicture")(req, res, async function (error) {
-    if (error) {
-      return res.status(400).json({ status: "Failed", message: error.message });
-    }
-
-    try {
-        // Get user fields from body
-      const { name, lastName, username, email, password, role } = req.body;
-
-      const serverUrl = process.env.NODE_ENV === 'production' 
-        ? "https://femme-frights-demo-production.up.railway.app"
-        : "http://localhost:3500";  
-
-      // If a profile picture is not uploaded: default
-      const profilePicture = req.file
-        ? `${serverUrl}/uploads/${req.file.filename}`
-        : `${serverUrl}/uploads/default-profile-picture.png`;
-
-        // Validations: no empty fields
-      if (!name || !lastName || !username || !email || !password) {
-        return res.status(400).json({
-          status: "Failed",
-          message: "Name, last name, username, email and password are required",
-        });
+    upload.single("profilePicture")(req, res, async function (error) {
+      if (error) {
+        return res.status(400).json({ status: "Failed", message: error.message });
       }
-
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create user
-      const newUser = await UserModel.create({
-        name,
-        lastName,
-        username,
-        email,
-        password: hashedPassword,
-        role,
-        profilePicture,
-      });
-
-      // Send welcome email
-      await sendEmail(email);
-
-      res.status(201).json({
-        status: "Success",
-        message: "User successfully created",
-        user: newUser,
-      });
-    } catch (error) {
-      res.status(500).json({ status: "Failed", message: error.message });
-    }
-  });
-};
+  
+      try {
+        // Get user fields from body
+        const { name, lastName, username, email, password, role } = req.body;
+  
+        const serverUrl = process.env.NODE_ENV === 'production' 
+          ? "https://femme-frights-demo-production.up.railway.app"
+          : "http://localhost:3500";  
+  
+        // If a profile picture is not uploaded: default
+        const profilePicture = req.file
+          ? `/uploads/${req.file.filename}` // Save only the relative path
+          : `/uploads/default-profile-picture.png`; // Default image path
+  
+        // Validations: no empty fields
+        if (!name || !lastName || !username || !email || !password) {
+          return res.status(400).json({
+            status: "Failed",
+            message: "Name, last name, username, email and password are required",
+          });
+        }
+  
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+  
+        // Create user
+        const newUser = await UserModel.create({
+          name,
+          lastName,
+          username,
+          email,
+          password: hashedPassword,
+          role,
+          profilePicture,
+        });
+  
+        // Send welcome email
+        await sendEmail(email);
+  
+        // Prepend server URL if needed
+        if (newUser.profilePicture && !newUser.profilePicture.startsWith('http')) {
+          newUser.profilePicture = `${serverUrl}${newUser.profilePicture}`;
+        }
+  
+        res.status(201).json({
+          status: "Success",
+          message: "User successfully created",
+          user: newUser,
+        });
+      } catch (error) {
+        res.status(500).json({ status: "Failed", message: error.message });
+      }
+    });
+  };
 
 // Login controller
 const login = async (req, res) => {
