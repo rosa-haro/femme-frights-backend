@@ -48,7 +48,7 @@ const getUserById = async (req, res) => {
           message: "Password must be at least 8 characters long",
         });
       } else if (newUserData.password) {
-        newUserData.password = await bcryptjs.hash(newUserData.password, 10);
+        newUserData.password = await bcrypt.hash(newUserData.password, 10);
       }
   
       // Handle profile picture update

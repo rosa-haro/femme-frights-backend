@@ -34,7 +34,7 @@ const upload = require("../middlewares/multer");
         }
   
         // Hash password
-        const hashedPassword = await bcryptjs.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
   
         // Create user
         const newUser = await UserModel.create({
