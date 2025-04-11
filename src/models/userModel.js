@@ -71,6 +71,16 @@ const userSchema = new Schema({
   ],
 });
 
+// Logic for profile picture in production
+
+userSchema.methods.setProfilePicture = function (file) {
+  const serverUrl = process.env.NODE_ENV === 'production' 
+    ? "https://femme-frights-demo-production.up.railway.app"
+    : "http://localhost:3500";
+
+  this.profilePicture = file ? `${serverUrl}/uploads/${file.filename}` : this.profilePicture;
+};
+
 // PROFILE PICTURE AS A URL HAS NOT BEEN IMPLEMENTED IN THE FRONTEND YET, 
 // BUT WILL BE LEFT HERE FOR FUTURE IMPLEMENTATION 
 
