@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 // Get logged user's info, including favorites and watchlist
 const getUserById = async (req, res) => {
@@ -48,7 +48,7 @@ const getUserById = async (req, res) => {
           message: "Password must be at least 8 characters long",
         });
       } else if (newUserData.password) {
-        newUserData.password = await bcryptjs.hash(newUserData.password, 10);
+        newUserData.password = await bcrypt.hash(newUserData.password, 10);
       }
   
       // Handle profile picture update

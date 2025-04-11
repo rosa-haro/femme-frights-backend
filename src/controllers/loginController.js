@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/utils");
 const sendEmail = require("../services/emailServices");
 const upload = require("../middlewares/multer");
@@ -34,7 +34,7 @@ const upload = require("../middlewares/multer");
         }
   
         // Hash password
-        const hashedPassword = await bcryptjs.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
   
         // Create user
         const newUser = await UserModel.create({
@@ -88,7 +88,7 @@ const login = async (req, res) => {
     }
 
     // Validate password
-    const validatePassword = await bcryptjs.compare(password, user.password);
+    const validatePassword = await bcrypt.compare(password, user.password);
     if (!validatePassword) {
       return res
         .status(401)
