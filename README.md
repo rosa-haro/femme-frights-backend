@@ -22,7 +22,7 @@ A RESTful API for **FemmeFrights**, a platform focused on horror films directed 
 - **Backend:** Node.js, Express
 - **Database:** MongoDB + Mongoose
 - **Authentication:** JWT (Access & Refresh tokens)
-- **Utilities:** Multer, Bcrypt, Nodemailer, dotenv
+- **Utilities:** Multer, BcryptJS, Nodemailer, dotenv
 - **Testing Tools:** Postman or ThunderClient (recommended)
 
 ---
