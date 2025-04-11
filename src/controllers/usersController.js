@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 // Get logged user's info, including favorites and watchlist
 const getUserById = async (req, res) => {
