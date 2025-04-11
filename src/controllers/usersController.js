@@ -12,64 +12,82 @@ const getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
+
+    // Handle profile picture URL (add full URL if needed)
+    const serverUrl = process.env.NODE_ENV === 'production' 
+      ? "https://femme-frights-demo-production.up.railway.app"  // Production URL (Railway)
+      : "http://localhost:3500";  // Development URL (localhost)
+
+    // If profile picture is a relative path, prepend the server URL
+    if (user.profilePicture && !user.profilePicture.startsWith('http')) {
+      user.profilePicture = `${serverUrl}${user.profilePicture}`;
+    }
+
     res.status(200).send(user);
   } catch (error) {
     res.status(500).send({ status: "Failed", error: error.message });
   }
 };
 
-// Update logged user's profile
-const updateLoggedUser = async (req, res) => {
-  try {
-    const idUser = req.payload._id;
-    if (!idUser) {
-      return res
-        .status(400)
-        .json({ status: "Failed", message: "Invalid user ID" });
-    }
-
-    let newUserData = { ...req.body };
-
-    // Hash password + validate
-    if (newUserData.password?.length < 8) {
-      return res.status(400).json({
-        status: "Failed",
-        message: "Password must be at least 8 characters long",
+  // Update logged user's profile
+  const updateLoggedUser = async (req, res) => {
+    try {
+      const idUser = req.payload._id;
+      if (!idUser) {
+        return res
+          .status(400)
+          .json({ status: "Failed", message: "Invalid user ID" });
+      }
+  
+      let newUserData = { ...req.body };
+  
+      // Hash password + validate
+      if (newUserData.password?.length < 8) {
+        return res.status(400).json({
+          status: "Failed",
+          message: "Password must be at least 8 characters long",
+        });
+      } else if (newUserData.password) {
+        newUserData.password = await bcrypt.hash(newUserData.password, 10);
+      }
+  
+      // Handle profile picture update
+      if (req.file) {
+        console.log("Image received:", req.file);
+        
+        // Save only the relative path for the profile picture
+        newUserData.profilePicture = `/uploads/${req.file.filename}`;
+      } else {
+        console.log("No image received.");
+      }
+  
+      // Update user in database
+      const updatedUser = await UserModel.findByIdAndUpdate(idUser, newUserData, {
+        new: true,
+        runValidators: true,
       });
-    } else if (newUserData.password) {
-      newUserData.password = await bcrypt.hash(newUserData.password, 10);
+  
+      if (!updatedUser) {
+        return res
+          .status(404)
+          .json({ status: "Failed", message: "User not found" });
+      }
+  
+      // If we're in production, prepend the full server URL to the profile picture
+      if (updatedUser.profilePicture && !updatedUser.profilePicture.startsWith('http')) {
+        const serverUrl = process.env.NODE_ENV === 'production' 
+          ? "https://femme-frights-demo-production.up.railway.app"  // Production URL (Railway)
+          : "http://localhost:3500";  // Development URL (localhost)
+        
+        updatedUser.profilePicture = `${serverUrl}${updatedUser.profilePicture}`;
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error("Error in updateLoggedUser:", error);
+      res.status(500).json({ status: "Failed", error: error.message });
     }
-
-    // Handle profile picture update
-    if (req.file) {
-      console.log("Image received:", req.file);
-      const serverUrl = process.env.NODE_ENV === 'production' 
-        ? "https://femme-frights-demo-production.up.railway.app/"  
-        : "http://localhost:3500"; 
-
-        newUserData.profilePicture = `${serverUrl}/uploads/${req.file.filename}`;
-    } else {
-      console.log("No image received.");
-    }
-
-    // Update user in database
-    const updatedUser = await UserModel.findByIdAndUpdate(idUser, newUserData, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updatedUser) {
-      return res
-        .status(404)
-        .json({ status: "Failed", message: "User not found" });
-    }
-
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error("Error in updateLoggedUser:", error);
-    res.status(500).json({ status: "Failed", error: error.message });
-  }
-};
+  };
 
 // Delete logged user
 const deleteLoggedUser = async (req, res) => {
