@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // Get logged user's info, including favorites and watchlist
 const getUserById = async (req, res) => {
@@ -40,6 +40,7 @@ const getUserById = async (req, res) => {
       }
   
       let newUserData = { ...req.body };
+      delete newUserData.profilePicture
   
       // Hash password + validate
       if (newUserData.password?.length < 8) {
