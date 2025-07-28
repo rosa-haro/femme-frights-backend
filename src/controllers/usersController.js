@@ -82,7 +82,16 @@ const getUserById = async (req, res) => {
         updatedUser.profilePicture = `${serverUrl}${updatedUser.profilePicture}`;
       }
 
-      res.status(200).json(updatedUser);
+      const profilePictureUrl = updatedUser.profilePicture?.startsWith("http")
+      ? updatedUser.profilePicture
+      : `${serverUrl}${updatedUser.profilePicture}`;
+      
+      const userToSend = {
+      ...updatedUser._doc,
+      profilePicture: profilePictureUrl,
+      };
+
+      res.status(200).json(userToSend);
     } catch (error) {
       console.error("Error in updateLoggedUser:", error);
       res.status(500).json({ status: "Failed", error: error.message });

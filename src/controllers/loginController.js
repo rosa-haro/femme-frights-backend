@@ -51,15 +51,21 @@ const upload = require("../middlewares/multer");
         await sendEmail(email);
   
         // Prepend server URL if needed
-        if (newUser.profilePicture && !newUser.profilePicture.startsWith('http')) {
-          newUser.profilePicture = `${serverUrl}${newUser.profilePicture}`;
-        }
-  
-        res.status(201).json({
-          status: "Success",
-          message: "User successfully created",
-          user: newUser,
-        });
+        const profilePictureUrl = newUser.profilePicture?.startsWith("http")
+          ? newUser.profilePicture
+          : `${serverUrl}${newUser.profilePicture}`;
+
+          const userToSend = {
+            ...newUser._doc,
+            profilePicture: profilePictureUrl,
+          };
+
+          res.status(201).json({
+            status: "Success",
+            message: "User successfully created",
+            user: userToSend,
+          });
+
       } catch (error) {
         res.status(500).json({ status: "Failed", message: error.message });
       }
