@@ -17,7 +17,7 @@ const upload = require("../middlewares/multer");
         const { name, lastName, username, email, password, role } = req.body;
   
         const serverUrl = process.env.NODE_ENV === 'production' 
-          ? "https://femme-frights-demo-production.up.railway.app"
+          ? "https://femme-frights-backend.onrender.com"
           : "http://localhost:3500";  
   
         // If a profile picture is not uploaded: default

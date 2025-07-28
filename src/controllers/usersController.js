@@ -15,7 +15,7 @@ const getUserById = async (req, res) => {
 
     // Handle profile picture URL (add full URL if needed)
     const serverUrl = process.env.NODE_ENV === 'production' 
-      ? "https://femme-frights-demo-production.up.railway.app"  // Production URL (Railway)
+      ? "https://femme-frights-backend.onrender.com"  // Production URL (Render)
       : "http://localhost:3500";  // Development URL (localhost)
 
     // If profile picture is a relative path, prepend the server URL
@@ -76,7 +76,7 @@ const getUserById = async (req, res) => {
       // If we're in production, prepend the full server URL to the profile picture
       if (updatedUser.profilePicture && !updatedUser.profilePicture.startsWith('http')) {
         const serverUrl = process.env.NODE_ENV === 'production' 
-          ? "https://femme-frights-demo-production.up.railway.app"  // Production URL (Railway)
+          ? "https://femme-frights-backend.onrender.com"  // Production URL (Render)
           : "http://localhost:3500";  // Development URL (localhost)
         
         updatedUser.profilePicture = `${serverUrl}${updatedUser.profilePicture}`;
